@@ -2,5 +2,6 @@ django
 djangorestframework
 djangorestframework-simplejwt
 django-cors-headers
+phonenumbers
 django-phonenumber-field
 python-dotenv
