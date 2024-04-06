@@ -1,0 +1,24 @@
+[
+  {
+    "model": "auth.Group",
+    "fields": {
+      "name": "customer"
+    }
+  },
+  {
+    "model": "auth.Group",
+    "fields": {
+      "name": "manufacturer"
+    }
+  },
+  {
+    "model": "app.User",
+    "fields": {
+      "username": "admin",
+      "email": "admin@admin.admin",
+      "password": "pbkdf2_sha256$720000$7ED7LUgGd0QdZcTwHNrQlS$iftNqkb2feLPI56Wa9ycEOe8fyK63Q/39XjiSR37BCc=",
+      "is_staff": true,
+      "is_superuser": true
+    }
+  }
+]
