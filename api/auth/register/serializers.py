@@ -7,13 +7,18 @@ from api.auth.register.validators import NotEmailValidator
 
 UserModel = get_user_model()
 
+roles = [
+    ("manufacturer", "manufacturer"),
+    ("customer", "customer"),
+]
+
 
 class RegisterSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=255, validators=[NotEmailValidator()])
     email = serializers.EmailField(max_length=255)
     password = serializers.CharField(max_length=255, write_only=True)
 
-    role = serializers.CharField(max_length=255, write_only=True)
+    role = serializers.ChoiceField(choices=roles)
 
     class Meta:
         model = UserModel
@@ -33,10 +38,10 @@ class RegisterSerializer(serializers.Serializer):
         django_validate_password(value)
         return value
 
-    def validate_role(self, value):
-        if value not in ['customer', 'performer']:
-            raise serializers.ValidationError('Неверный тип пользователя')
-        return value
+    # def validate_role(self, value):
+    #     if value not in ['customer', 'performer']:
+    #         raise serializers.ValidationError('Неверный тип пользователя')
+    #     return value
 
     def create(self, validated_data):
         role = validated_data.pop('role')
