@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  web:
+    build: .
+    container_name: sharkback
+    ports:
+      - ${BACKEND_PORT}:8000
+    volumes:
+      - .:/app
+    networks:
+      - shark_network
+
+networks:
+  shark_network:
+    driver: bridge
+    external: true
