@@ -81,6 +81,8 @@ AUTH_USER_MODEL = "app.User"
 
 FRONTEND_HOST = os.environ["FRONTEND_HOST"]
 
+APPEND_SLASH = True
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
