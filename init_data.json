@@ -1,12 +1,14 @@
 [
   {
     "model": "auth.Group",
+    "pk": 1,
     "fields": {
       "name": "customer"
     }
   },
   {
     "model": "auth.Group",
+    "pk": 2,
     "fields": {
       "name": "manufacturer"
     }
@@ -19,6 +21,127 @@
       "password": "pbkdf2_sha256$720000$7ED7LUgGd0QdZcTwHNrQlS$iftNqkb2feLPI56Wa9ycEOe8fyK63Q/39XjiSR37BCc=",
       "is_staff": true,
       "is_superuser": true
+    }
+  },
+
+  {
+    "model": "app.User",
+    "fields": {
+      "username": "xetpy",
+      "email": "xetpy1030@mail.ru",
+      "password": "pbkdf2_sha256$720000$lgB84OEspINxzQ4TcHnwIu$NVlBod7Yvl91Ewu0Z66VBK9XC9TdwERgSNWFQusnGV0=",
+      "groups": [
+        1
+      ]
+    }
+  },
+
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Москва"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Санкт-Петербург"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Новосибирск"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Екатеринбург"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Нижний Новгород"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Казань"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Челябинск"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Омск"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Самара"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Ростов-на-Дону"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Уфа"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Красноярск"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Пермь"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Воронеж"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Волгоград"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Краснодар"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Саратов"
+    }
+  },
+  {
+    "model": "app.City",
+    "fields": {
+      "name": "Тюмень"
     }
   }
 ]
