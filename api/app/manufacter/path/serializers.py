@@ -9,10 +9,17 @@ class CitySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PathCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Path
+        fields = '__all__'
+
+
 class PathSerializer(serializers.ModelSerializer):
     class Meta:
         model = Path
         fields = '__all__'
+        read_only_fields = ('point_a', 'point_b')
 
 
 class PathInfoSerializer(serializers.ModelSerializer):

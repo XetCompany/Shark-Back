@@ -72,6 +72,14 @@ class ProductCompany(models.Model):
         on_delete=models.CASCADE
     )
 
+    class Meta:
+        ordering = ('id',)
+        verbose_name = 'Изделие производства'
+        verbose_name_plural = 'Изделия производства'
+
+    def __str__(self):
+        return f'id: {self.id}, name: {self.name}'
+
 
 class City(models.Model):
     name = models.CharField(

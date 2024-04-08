@@ -143,5 +143,18 @@
     "fields": {
       "name": "Тюмень"
     }
+  },
+
+  {
+    "model": "app.ProductCategory",
+    "fields": {
+      "name": "Техника"
+    }
+  },
+  {
+    "model": "app.ProductCategory",
+    "fields": {
+      "name": "Одежда"
+    }
   }
 ]

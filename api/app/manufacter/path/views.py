@@ -2,7 +2,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import PathInfoSerializer, PathSerializer
+from .serializers import (
+    PathInfoSerializer, PathSerializer,
+    PathCreateSerializer,
+)
 
 
 class PathView(APIView):
@@ -14,7 +17,7 @@ class PathView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = PathSerializer(data=request.data)
+        serializer = PathCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         path = serializer.save()
         user = request.user
