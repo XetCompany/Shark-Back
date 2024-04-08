@@ -202,7 +202,7 @@ class Path(models.Model):
         verbose_name_plural = 'Пути'
 
     def __str__(self):
-        return f'id: {self.id}, point_a: {self.point_a.city.name}, point_b: {self.point_b.city.name}'
+        return f'id: {self.id}, point_a: {self.point_a.name}, point_b: {self.point_b.name}'
 
 
 class PathGroup(models.Model):
@@ -361,6 +361,10 @@ class Cart(models.Model):
         to='User',
         on_delete=models.CASCADE
     )
+
+    def get_cart_product(self, product_id):
+        product = ProductCompany.objects.get(id=product_id)
+        return self.products.get(product=product)
 
     class Meta:
         ordering = ('id',)

@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers
 
-from app.models import User
+from app.models import User, ProductCompany
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
@@ -13,3 +13,11 @@ class UserInfoSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['groups'] = Group.objects.filter(user=instance).values_list('name', flat=True)
         return representation
+
+
+class ProductCompanySerializer(serializers.ModelSerializer):
+    company = UserInfoSerializer()
+
+    class Meta:
+        model = ProductCompany
+        fields = '__all__'
