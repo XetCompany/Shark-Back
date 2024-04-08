@@ -63,13 +63,17 @@ REST_FRAMEWORK = {
     ],
 }
 
+email = os.environ["GMAIL_MAIL"]
+email_password = os.environ["GMAIL_PASSWORD"]
+
+DEFAULT_FROM_EMAIL = email
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.mail.ru'
-DEFAULT_FROM_EMAIL = 'xetpy1030@mail.ru'
-EMAIL_PORT = 465
-EMAIL_HOST_USER = 'xetpy1030@mail.ru'
-EMAIL_HOST_PASSWORD = 'yG7z285zWngHZa0cCjEk'
-EMAIL_USE_SSL = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = email
+EMAIL_HOST_PASSWORD = email_password
 
 AUTHENTICATION_BACKENDS = [
     'api.auth.model_auth.CustomModelBackend',
