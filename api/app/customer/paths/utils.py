@@ -7,7 +7,7 @@ from app.models import (
 
 
 def search_paths(user: User, filters: dict, pickup_point: PointInCity, limit: int = 10):
-    # А если склад и пункт выдачи в одном городе?
+    # ToDo: А если склад и пункт выдачи в одном городе?
 
     cart = Cart.objects.get_or_create(user=user)[0]
     first_cart_product = cart.products.first()

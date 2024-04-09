@@ -323,6 +323,9 @@ class OrderProduct(models.Model):
         verbose_name='Количество'
     )
 
+    def to_cart_product(self):
+        return CartProduct.objects.create(product=self.product, count=self.count)
+
     class Meta:
         ordering = ('id',)
         verbose_name = 'Заказной продукт'
