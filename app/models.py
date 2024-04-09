@@ -65,6 +65,7 @@ class ProductCompany(models.Model):
         blank=True,
         null=True
     )
+    # TODO: сделать проверки на доступность
     is_available = models.BooleanField(
         verbose_name='Доступность для покупателя',
         default=True
@@ -106,6 +107,10 @@ class PointType(models.TextChoices):
 
 
 class PointInCity(models.Model):
+    name = models.CharField(
+        verbose_name='Название',
+        max_length=255
+    )
     city = models.ForeignKey(
         verbose_name='Город',
         to='City',
@@ -133,7 +138,7 @@ class PointInCity(models.Model):
         unique_together = ('city', 'type', 'company')
 
     def __str__(self):
-        return f'id: {self.id}, city: {self.city.name}, type: {self.type}, company: {self.company.username}'
+        return f'id: {self.id}, name: {self.name}, city: {self.city.name}, type: {self.type}, company: {self.company.username}'
 
 
 class ProductInWarehouse(models.Model):
@@ -229,7 +234,7 @@ class GroupPath(models.Model):
         verbose_name_plural = 'Пути заказа'
 
     def __str__(self):
-        return f'id: {self.id}, path: {self.path.point_a.name} -> {self.path.point_b.name}, product: {self.product.name}, count: {self.count}'
+        return f'id: {self.id}, path: {self.path.point_a.name} -> {self.path.point_b.name} is_reversed: {self.is_reversed}'
 
 
 class GroupPathsRelation(models.Model):
@@ -250,7 +255,7 @@ class GroupPathsRelation(models.Model):
         verbose_name_plural = 'Связи группы путей и пути заказа'
 
     def __str__(self):
-        return f'id: {self.id}'
+        return f'id: {self.id} group_paths: {self.group_paths.id} group_path: {self.group_path.id}'
 
 
 class GroupPaths(models.Model):
@@ -267,6 +272,17 @@ class GroupPaths(models.Model):
     count = models.PositiveIntegerField(
         verbose_name='Количество'
     )
+    warehouse = models.ForeignKey(
+        verbose_name='Склад',
+        to='PointInCity',
+        on_delete=models.CASCADE
+    )
+
+    def get_copy(self):
+        group_paths = GroupPaths.objects.create(product=self.product, count=self.count, warehouse=self.warehouse)
+        for group_path in self.paths.all():
+            GroupPathsRelation.objects.create(group_paths=group_paths, group_path=group_path)
+        return group_paths
 
     class Meta:
         ordering = ('id',)
@@ -274,7 +290,7 @@ class GroupPaths(models.Model):
         verbose_name_plural = 'Группы путей заказа'
 
     def __str__(self):
-        return f'id: {self.id}'
+        return f'id: {self.id} product: {self.product.name} count: {self.count} warehouse: {self.warehouse.city.name}'
 
 
 class SearchInfo(models.Model):
@@ -287,6 +303,14 @@ class SearchInfo(models.Model):
         verbose_name='Группы путей',
         to='GroupPaths'
     )
+
+    class Meta:
+        ordering = ('id',)
+        verbose_name = 'Информация о поиске'
+        verbose_name_plural = 'Информации о поиске'
+
+    def __str__(self):
+        return f'id: {self.id}'
 
 
 class OrderProduct(models.Model):
@@ -340,7 +364,8 @@ class Order(models.Model):
     decline_reason = models.TextField(
         verbose_name='Причина отклонения',
         blank=True,
-        null=True
+        null=True,
+        default=None
     )
     user = models.ForeignKey(
         verbose_name='Пользователь',
@@ -354,7 +379,7 @@ class Order(models.Model):
         verbose_name_plural = 'Заказы'
 
     def __str__(self):
-        return f'id: {self.id}'
+        return f'id: {self.id} user: {self.user.username} status: {self.status} products_count: {self.products.count()}'
 
 
 class CartProduct(models.Model):
@@ -366,6 +391,9 @@ class CartProduct(models.Model):
     count = models.PositiveIntegerField(
         verbose_name='Количество'
     )
+
+    def to_order_product(self):
+        return OrderProduct.objects.create(product=self.product, count=self.count)
 
     class Meta:
         ordering = ('id',)
@@ -397,7 +425,7 @@ class Cart(models.Model):
         verbose_name_plural = 'Корзины'
 
     def __str__(self):
-        return f'id: {self.id}'
+        return f'id: {self.id} user: {self.user.username} products_count: {self.products.count()}'
 
 
 class User(AbstractUser):
@@ -479,3 +507,5 @@ class ResetPasswordToken(models.Model):
 
     def __str__(self):
         return f'id: {self.id}, user: {self.user.username}'
+
+all = [ProductCategory, ProductCompany, City, PointType, PointInCity, ProductInWarehouse, PathType, Path, GroupPath, GroupPathsRelation, GroupPaths, SearchInfo, OrderProduct, OrderStatus, Order, CartProduct, Cart, User, ResetPasswordToken]

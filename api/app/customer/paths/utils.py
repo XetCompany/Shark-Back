@@ -56,6 +56,7 @@ def get_warehouses_products_details_for_paths(cart, company, sorted_shortest_pat
                 {
                     'products': decreased_products,
                     'paths_info': paths_info,
+                    'city': target_node,
                 }
             )
 
@@ -90,9 +91,11 @@ def generate_search_infos(warehouses_details, cart, company):
         for warehouse_detail in warehouse_detail_group:
             for product_id, count in warehouse_detail['products'].items():
                 product = ProductCompany.objects.get(id=product_id, company=company)
+                warehouse = PointInCity.objects.get(city__name=warehouse_detail['city'], company=company, type=PointType.WAREHOUSE)
                 group_paths = GroupPaths.objects.create(
                     product=product,
                     count=count,
+                    warehouse=warehouse,
                 )
 
                 for path, is_reverse in warehouse_detail['paths_info']:
