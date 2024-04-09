@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -11,6 +12,7 @@ from app.models import SearchInfo, PointInCity, PointType
 class PickupPointPathsView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(parameters=[PathsFiltersSerializer], responses=SearchInfoSerializer(many=True))
     def get(self, request, pickup_point_id):
         serializer = PathsFiltersSerializer(data=request.query_params)
         serializer.is_valid(raise_exception=True)

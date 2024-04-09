@@ -1,5 +1,6 @@
 import logging
 
+from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -11,6 +12,7 @@ from app.models import Order, Cart, SearchInfo, OrderStatus, ProductInWarehouse
 class OrderView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(responses=OrderSerializer(many=True))
     def get(self, request):
         orders = Order.objects.filter(user=request.user).all()
         serializer = OrderSerializer(orders, many=True)
@@ -20,6 +22,7 @@ class OrderView(APIView):
 class OrderSearchInfoView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(responses=OrderSerializer)
     def post(self, request, search_info_id):
         """
         Создание заказа на основе информации о поиске маршрута и корзины
@@ -69,6 +72,7 @@ class OrderSearchInfoView(APIView):
 class OrderInfoView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(responses=OrderSerializer)
     def get(self, request, order_id):
         order = Order.objects.get(id=order_id, user=request.user)
         return Response(OrderSerializer(order).data)
@@ -77,6 +81,7 @@ class OrderInfoView(APIView):
 class OrderStatusView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(request=OrderEditSerializer, responses=OrderSerializer)
     def post(self, request, order_id):
         order = Order.objects.get(id=order_id, user=request.user)
         serializer = OrderEditSerializer(data=request.data, context={'order': order})

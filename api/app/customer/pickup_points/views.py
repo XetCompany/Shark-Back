@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -9,6 +10,7 @@ from app.models import Cart, PointInCity, PointType
 class PickupPointsView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(responses=PointInCitySerializer(many=True))
     def get(self, request):
         cart = Cart.objects.get_or_create(user=request.user)[0]
 

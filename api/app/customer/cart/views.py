@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -12,6 +13,7 @@ from app.models import Cart, ProductCompany, Order
 class CartView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(responses=CartProductSerializer(many=True))
     def get(self, request):
         cart = Cart.objects.get_or_create(user=request.user)[0]
         serializer = CartProductSerializer(cart.products, many=True)
@@ -21,6 +23,7 @@ class CartView(APIView):
 class CartProductView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(request=CartProductAddSerializer, responses=CartProductAddSerializer)
     def post(self, request, product_id):
         product = ProductCompany.objects.get(id=product_id)
         cart = Cart.objects.get_or_create(user=request.user)[0]
@@ -33,6 +36,7 @@ class CartProductView(APIView):
 
         return Response(serializer.data)
 
+    @extend_schema(request=CartProductUpdateSerializer, responses=204)
     def put(self, request, product_id):
         cart = Cart.objects.get(user=request.user)
         cart_product = cart.get_cart_product(product_id)
@@ -41,6 +45,7 @@ class CartProductView(APIView):
         serializer.save()
         return Response()
 
+    @extend_schema(responses=204)
     def delete(self, request, product_id):
         cart = Cart.objects.get(user=request.user)
         cart_product = cart.get_cart_product(product_id)
@@ -51,6 +56,7 @@ class CartProductView(APIView):
 class CartFromOrderView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(responses=204)
     def post(self, request, order_id):
         cart = Cart.objects.get_or_create(user=request.user)[0]
         if cart.products.exists():

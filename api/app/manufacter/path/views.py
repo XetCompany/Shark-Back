@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -11,11 +12,13 @@ from .serializers import (
 class PathView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(responses=PathInfoSerializer(many=True))
     def get(self, request):
         paths = request.user.paths.all()
         serializer = PathInfoSerializer(paths, many=True)
         return Response(serializer.data)
 
+    @extend_schema(request=PathCreateSerializer, responses=PathCreateSerializer)
     def post(self, request):
         serializer = PathCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -28,11 +31,13 @@ class PathView(APIView):
 class PathDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(responses=PathInfoSerializer)
     def get(self, request, path_id):
         path = request.user.paths.get(id=path_id)
         serializer = PathInfoSerializer(path)
         return Response(serializer.data)
 
+    @extend_schema(request=PathSerializer, responses=PathSerializer)
     def put(self, request, path_id):
         path = request.user.paths.get(id=path_id)
         serializer = PathSerializer(data=request.data, instance=path, partial=True)
@@ -40,6 +45,7 @@ class PathDetailView(APIView):
         serializer.save()
         return Response(serializer.data)
 
+    @extend_schema(responses=204)
     def delete(self, request, path_id):
         path = request.user.paths.get(id=path_id)
         path.delete()
