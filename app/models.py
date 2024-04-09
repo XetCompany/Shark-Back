@@ -75,6 +75,10 @@ class ProductCompany(models.Model):
         to='User',
         on_delete=models.CASCADE
     )
+    evaluations = models.ManyToManyField(
+        verbose_name='Оценки и комментарии',
+        to='EvaluationAndComment',
+    )
 
     class Meta:
         ordering = ('id',)
@@ -83,6 +87,30 @@ class ProductCompany(models.Model):
 
     def __str__(self):
         return f'id: {self.id}, name: {self.name}'
+
+
+class EvaluationAndComment(models.Model):
+    evaluation = models.PositiveIntegerField(
+        verbose_name='Оценка'
+    )
+    comment = models.TextField(
+        verbose_name='Комментарий',
+        blank=True,
+        null=True
+    )
+    author = models.ForeignKey(
+        verbose_name='Автор',
+        to='User',
+        on_delete=models.CASCADE
+    )
+
+    class Meta:
+        ordering = ('id',)
+        verbose_name = 'Оценка и комментарий'
+        verbose_name_plural = 'Оценки и комментарии'
+
+    def __str__(self):
+        return f'id: {self.id}, evaluation: {self.evaluation}, comment: {self.comment}'
 
 
 class City(models.Model):
@@ -338,15 +366,15 @@ class OrderProduct(models.Model):
 class OrderStatus(models.TextChoices):
     """
     Статус заказа
-    new - заказ просто создан, пока что просто заполняется продуктами
     in_progress - заказ находится в доставке, доставка выбрана, заказ отправлен
     awaiting - заказ ожидает забора, покупатель примет или отклонит заказ
     delivered - заказ доставлен
     """
-    NEW = 'new', 'Новый'
     IN_PROGRESS = 'in_progress', 'В процессе'
     AWAITING = 'awaiting', 'Ожидает забора'
-    DELIVERED = 'delivered', 'Доставлен'
+
+    ADOPTED = 'adopted', 'Принят'
+    DECLINED = 'declined', 'Отклонен'
 
 
 class Order(models.Model):
@@ -362,7 +390,7 @@ class Order(models.Model):
         verbose_name='Статус',
         max_length=255,
         choices=OrderStatus.choices,
-        default=OrderStatus.NEW
+        default=OrderStatus.IN_PROGRESS
     )
     decline_reason = models.TextField(
         verbose_name='Причина отклонения',
@@ -510,5 +538,3 @@ class ResetPasswordToken(models.Model):
 
     def __str__(self):
         return f'id: {self.id}, user: {self.user.username}'
-
-all = [ProductCategory, ProductCompany, City, PointType, PointInCity, ProductInWarehouse, PathType, Path, GroupPath, GroupPathsRelation, GroupPaths, SearchInfo, OrderProduct, OrderStatus, Order, CartProduct, Cart, User, ResetPasswordToken]

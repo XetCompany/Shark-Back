@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.app.customer.orders.serializers import OrderSerializer
+from api.app.customer.orders.serializers import OrderSerializer, OrderEditSerializer
 from app.models import Order, Cart, SearchInfo, OrderStatus, ProductInWarehouse
 
 
@@ -40,7 +40,8 @@ class OrderSearchInfoView(APIView):
         order = Order.objects.create(user=request.user)
         order.products.set(order_products)
         order.group_paths.set(groups_paths)
-        order.status = OrderStatus.IN_PROGRESS
+        # TODO: temp, мгновенная доставка, принимать должен Производитель или таймер
+        order.status = OrderStatus.AWAITING
         order.save()
 
         # Очистка корзины
@@ -62,5 +63,26 @@ class OrderSearchInfoView(APIView):
             else:
                 product_warehouse.save()
 
+        return Response(OrderSerializer(order).data)
+
+
+class OrderInfoView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, order_id):
+        order = Order.objects.get(id=order_id, user=request.user)
+        return Response(OrderSerializer(order).data)
+
+
+class OrderStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, order_id):
+        order = Order.objects.get(id=order_id, user=request.user)
+        serializer = OrderEditSerializer(data=request.data, context={'order': order})
+        serializer.is_valid(raise_exception=True)
+        order.status = serializer.validated_data['status']
+        order.decline_reason = serializer.validated_data.get('decline_reason')
+        order.save()
         return Response(OrderSerializer(order).data)
 
