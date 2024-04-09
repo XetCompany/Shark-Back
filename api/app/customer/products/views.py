@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.app.common.serializers import ProductCompanySerializer
-from api.app.customer.products.serializers import EvaluationAndCommentSerializer
+from api.app.customer.products.serializers import AddEvaluationAndCommentSerializer
 from api.app.customer.serializers import ProductCompanyCustomerSerializer
 from app.models import ProductCompany
 
@@ -32,10 +32,10 @@ class ProductInfoView(APIView):
 class ProductEvaluateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(request=EvaluationAndCommentSerializer, responses=EvaluationAndCommentSerializer)
+    @extend_schema(request=AddEvaluationAndCommentSerializer, responses=AddEvaluationAndCommentSerializer)
     def post(self, request, product_id):
         product = ProductCompany.objects.get(id=product_id)
-        serializer = EvaluationAndCommentSerializer(
+        serializer = AddEvaluationAndCommentSerializer(
             data=request.data,
             context={'user': request.user, 'product': product}
         )

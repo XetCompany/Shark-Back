@@ -3,14 +3,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.app.customer.pickup_points.serializers import PointInCitySerializer
+from api.app.customer.pickup_points.serializers import PickupPointSerializer
 from app.models import Cart, PointInCity, PointType
 
 
 class PickupPointsView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(responses=PointInCitySerializer(many=True))
+    @extend_schema(responses=PickupPointSerializer(many=True))
     def get(self, request):
         cart = Cart.objects.get_or_create(user=request.user)[0]
 
@@ -23,5 +23,5 @@ class PickupPointsView(APIView):
 
         pickup_points = PointInCity.objects.filter(company=company, type=PointType.PICKUP_POINT).all()
 
-        serializer = PointInCitySerializer(pickup_points, many=True)
+        serializer = PickupPointSerializer(pickup_points, many=True)
         return Response(serializer.data)

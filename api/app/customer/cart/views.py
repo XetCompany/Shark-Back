@@ -36,7 +36,7 @@ class CartProductView(APIView):
 
         return Response(serializer.data)
 
-    @extend_schema(request=CartProductUpdateSerializer, responses=204)
+    @extend_schema(request=CartProductUpdateSerializer)
     def put(self, request, product_id):
         cart = Cart.objects.get(user=request.user)
         cart_product = cart.get_cart_product(product_id)
@@ -45,7 +45,7 @@ class CartProductView(APIView):
         serializer.save()
         return Response()
 
-    @extend_schema(responses=204)
+    @extend_schema(responses={204: None})
     def delete(self, request, product_id):
         cart = Cart.objects.get(user=request.user)
         cart_product = cart.get_cart_product(product_id)
@@ -56,7 +56,7 @@ class CartProductView(APIView):
 class CartFromOrderView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(responses=204)
+    @extend_schema(responses={204: None})
     def post(self, request, order_id):
         cart = Cart.objects.get_or_create(user=request.user)[0]
         if cart.products.exists():

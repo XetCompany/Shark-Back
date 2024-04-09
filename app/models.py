@@ -208,6 +208,15 @@ class PathType(models.TextChoices):
     AIR = 'air', 'Воздушный'
 
 
+converter_path_type = {
+    'Автомобильный': PathType.AUTOMOBILE,
+    'Железнодорожный': PathType.RAILWAY,
+    'Морской': PathType.SEA,
+    'Речной': PathType.RIVER,
+    'Воздушный': PathType.AIR
+}
+
+
 class Path(models.Model):
     point_a = models.ForeignKey(
         verbose_name='Точка А',

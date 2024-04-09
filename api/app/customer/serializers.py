@@ -1,14 +1,10 @@
 from rest_framework import serializers
 
-from api.app.common.serializers import ProductCompanySerializer, UserInfoSerializer, EvaluationAndCommentSerializer
+from api.app.common.serializers import (
+    ProductCompanySerializer, CitySerializer,
+)
 from api.app.customer.products.utils import user_can_comment_product
-from app.models import City, Path, GroupPaths, SearchInfo, GroupPath, ProductCompany
-
-
-class CitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = City
-        fields = '__all__'
+from app.models import Path, GroupPaths, SearchInfo, GroupPath
 
 
 class PathSerializer(serializers.ModelSerializer):

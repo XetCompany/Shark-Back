@@ -4,7 +4,7 @@ from api.app.customer.products.utils import user_can_comment_product
 from app.models import EvaluationAndComment
 
 
-class EvaluationAndCommentSerializer(serializers.ModelSerializer):
+class AddEvaluationAndCommentSerializer(serializers.ModelSerializer):
     evaluation = serializers.IntegerField(min_value=1, max_value=5)
 
     class Meta:

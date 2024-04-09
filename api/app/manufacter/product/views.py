@@ -41,7 +41,7 @@ class ProductDetailView(APIView):
         serializer.save()
         return Response(serializer.data)
 
-    @extend_schema(responses=204)
+    @extend_schema(responses={204: None})
     def delete(self, request, product_id):
         product = ProductCompany.objects.get(id=product_id)
         product.delete()

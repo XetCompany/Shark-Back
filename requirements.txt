@@ -7,3 +7,5 @@ django-phonenumber-field
 python-dotenv
 pillow
 drf-spectacular
+pandas
+openpyxl

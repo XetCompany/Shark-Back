@@ -36,7 +36,7 @@ class PointDetailView(APIView):
         serializer = PointInCitySerializer(point)
         return Response(serializer.data)
 
-    @extend_schema(responses=204)
+    @extend_schema(responses={204: None})
     def delete(self, request, point_id):
         point = PointInCity.objects.get(id=point_id, company=request.user)
         point.delete()
@@ -84,7 +84,7 @@ class PointProductDetailView(APIView):
         serializer.save()
         return Response(serializer.data)
 
-    @extend_schema(responses=204)
+    @extend_schema(responses={204: None})
     def delete(self, request, point_id, product_id):
         product = ProductInWarehouse.objects.get(
             id=product_id, warehouse__point__id=point_id, warehouse__point__company=request.user

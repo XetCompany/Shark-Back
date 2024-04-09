@@ -1,12 +1,8 @@
+from django.db.models import Q
 from rest_framework import serializers
 
+from api.app.common.serializers import CitySerializer
 from app.models import Path, City
-
-
-class CitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = City
-        fields = '__all__'
 
 
 class PathCreateSerializer(serializers.ModelSerializer):
@@ -18,15 +14,17 @@ class PathCreateSerializer(serializers.ModelSerializer):
         if data['point_a'] == data['point_b']:
             raise serializers.ValidationError('Points must be different')
 
-        if Path.objects.filter(point_a=data['point_a'], point_b=data['point_b'], type=data['type']).exists():
-            raise serializers.ValidationError('Path already exists')
-        elif Path.objects.filter(point_a=data['point_b'], point_b=data['point_a'], type=data['type']).exists():
+        user = self.context['user']
+        if user.paths.filter(
+            Q(point_a=data['point_a'], point_b=data['point_b'], type=data['type']) |
+            Q(point_a=data['point_b'], point_b=data['point_a'], type=data['type'])
+        ).exists():
             raise serializers.ValidationError('Path already exists')
 
         return data
 
 
-class PathSerializer(serializers.ModelSerializer):
+class PathEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = Path
         fields = '__all__'
@@ -40,3 +38,11 @@ class PathInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Path
         fields = '__all__'
+
+
+class ImportExcelSerializer(serializers.Serializer):
+    excel = serializers.FileField()
+
+
+class PatternExcelSerializer(serializers.Serializer):
+    excel = serializers.FileField()
