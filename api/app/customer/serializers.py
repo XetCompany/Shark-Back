@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
-from api.app.common.serializers import ProductCompanySerializer
-from app.models import City, Path, GroupPaths, SearchInfo, GroupPath
+from api.app.common.serializers import ProductCompanySerializer, UserInfoSerializer, EvaluationAndCommentSerializer
+from api.app.customer.products.utils import user_can_comment_product
+from app.models import City, Path, GroupPaths, SearchInfo, GroupPath, ProductCompany
 
 
 class CitySerializer(serializers.ModelSerializer):
@@ -51,3 +52,10 @@ class SearchInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = SearchInfo
         exclude = ('user',)
+
+
+class ProductCompanyCustomerSerializer(ProductCompanySerializer):
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['is_need_comment'] = user_can_comment_product(self.context['user'], instance)
+        return data

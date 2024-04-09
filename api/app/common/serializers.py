@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers
 
-from app.models import User, ProductCompany
+from app.models import User, ProductCompany, EvaluationAndComment
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
@@ -15,8 +15,20 @@ class UserInfoSerializer(serializers.ModelSerializer):
         return representation
 
 
+class EvaluationAndCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EvaluationAndComment
+        exclude = ('author',)
+
+
 class ProductCompanySerializer(serializers.ModelSerializer):
     company = UserInfoSerializer()
+    evaluations = EvaluationAndCommentSerializer(many=True)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['average_rating'] = instance.avg_evaluation
+        return data
 
     class Meta:
         model = ProductCompany

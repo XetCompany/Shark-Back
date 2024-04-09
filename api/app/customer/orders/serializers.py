@@ -23,17 +23,23 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class OrderEditSerializer(serializers.ModelSerializer):
+    status = serializers.ChoiceField(choices=(
+        (OrderStatus.ADOPTED, 'Принят'),
+        (OrderStatus.DECLINED, 'Отклонен'),
+    ))
+    decline_reason = serializers.CharField(required=False)
+
     class Meta:
         model = Order
         fields = ('status', 'decline_reason')
 
     def validate_status(self, value):
+        if not value:
+            raise serializers.ValidationError('Status is required')
+
         order = self.context['order']
         if order.status != OrderStatus.AWAITING:
             raise serializers.ValidationError('Order status is not awaiting')
-
-        if value not in [OrderStatus.ADOPTED, OrderStatus.DECLINED]:
-            raise serializers.ValidationError('Invalid status')
 
         return value
 

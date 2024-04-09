@@ -80,6 +80,13 @@ class ProductCompany(models.Model):
         to='EvaluationAndComment',
     )
 
+    @property
+    def avg_evaluation(self):
+        evaluations = self.evaluations.all()
+        if not evaluations:
+            return 0
+        return sum([evaluation.evaluation for evaluation in evaluations]) / len(evaluations)
+
     class Meta:
         ordering = ('id',)
         verbose_name = 'Изделие производства'
