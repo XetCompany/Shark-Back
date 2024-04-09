@@ -16,3 +16,10 @@ class PathsFiltersSerializer(serializers.Serializer):
     is_river = serializers.BooleanField(default=True)
     is_air = serializers.BooleanField(default=True)
 
+    min_price = serializers.FloatField(min_value=0, required=False)
+    max_price = serializers.FloatField(min_value=0, required=False)
+    min_time = serializers.FloatField(min_value=0, required=False)
+    max_time = serializers.FloatField(min_value=0, required=False)
+    min_distance = serializers.FloatField(min_value=0, required=False)
+    max_distance = serializers.FloatField(min_value=0, required=False)
+
