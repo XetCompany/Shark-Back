@@ -29,14 +29,16 @@ def search_paths(user: User, filters: dict, pickup_point: PointInCity, limit: in
     sorted_shortest_path = list(filter(lambda x: x[0] in warehouse_cities, sorted_shortest_path))
     sorted_shortest_path = list(filter(lambda x: x[1] != sys.maxsize, sorted_shortest_path))
 
-    warehouses_details = get_warehouses_products_detail_for_paths(cart, company, sorted_shortest_path)
+    warehouses_details = get_warehouses_products_details_for_paths(
+        cart, company, sorted_shortest_path, previous_nodes, start_node
+    )
     warehouses_details = warehouses_details[:limit]
-    generate_search_infos(warehouses_details, cart, company, previous_nodes, start_node)
+    generate_search_infos(warehouses_details, cart, company)
 
     return warehouses_details
 
 
-def get_warehouses_products_detail_for_paths(cart, company, sorted_shortest_path):
+def get_warehouses_products_details_for_paths(cart, company, sorted_shortest_path, previous_nodes, start_node):
     cart_products = get_dict_products_from_cart(cart)
     warehouses_details = []
     warehouses_detail = []
@@ -48,10 +50,12 @@ def get_warehouses_products_detail_for_paths(cart, company, sorted_shortest_path
         decreased_products = decrease_products(cart_products, warehouse_products)
 
         if decreased_products:
+            paths_info = get_paths_from_product(target_node, previous_nodes, start_node)
+
             warehouses_detail.append(
                 {
-                    'city': target_node,
-                    'products': decreased_products
+                    'products': decreased_products,
+                    'paths_info': paths_info,
                 }
             )
 
@@ -78,23 +82,20 @@ def decrease_products(cart_products, warehouse_products):
     return deacreased_products
 
 
-def generate_search_infos(warehouses_details, cart, company, previous_nodes, start_node):
+def generate_search_infos(warehouses_details, cart, company):
     for warehouse_detail_group in warehouses_details:
         search_info = SearchInfo.objects.create(
             user=cart.user,
         )
         for warehouse_detail in warehouse_detail_group:
-            city_name = warehouse_detail['city']
             for product_id, count in warehouse_detail['products'].items():
-                paths_info = get_paths_from_product(city_name, product_id, company, previous_nodes, start_node)
-
                 product = ProductCompany.objects.get(id=product_id, company=company)
                 group_paths = GroupPaths.objects.create(
                     product=product,
                     count=count,
                 )
 
-                for path, is_reverse in paths_info:
+                for path, is_reverse in warehouse_detail['paths_info']:
                     group_path = GroupPath.objects.create(
                         path=path,
                         is_reversed=is_reverse,
@@ -107,7 +108,7 @@ def generate_search_infos(warehouses_details, cart, company, previous_nodes, sta
                 search_info.groups_paths.add(group_paths)
 
 
-def get_paths_from_product(target_node, product_id, company, previous_nodes, start_node):
+def get_paths_from_product(target_node, previous_nodes, start_node):
     paths = []
     node = target_node
     while node != start_node:
