@@ -15,6 +15,7 @@
   },
   {
     "model": "app.User",
+    "pk": 1,
     "fields": {
       "username": "admin",
       "email": "admin@admin.admin",
@@ -23,9 +24,9 @@
       "is_superuser": true
     }
   },
-
   {
     "model": "app.User",
+    "pk": 2,
     "fields": {
       "username": "xetpy",
       "email": "xetpy1030@mail.ru",
@@ -36,125 +37,396 @@
     }
   },
 
+
+
+
+
+
+
   {
     "model": "app.City",
+    "pk": 1,
     "fields": {
       "name": "Москва"
     }
   },
   {
     "model": "app.City",
+    "pk": 2,
     "fields": {
       "name": "Санкт-Петербург"
     }
   },
   {
     "model": "app.City",
+    "pk": 3,
     "fields": {
       "name": "Новосибирск"
     }
   },
   {
     "model": "app.City",
+    "pk": 4,
     "fields": {
       "name": "Екатеринбург"
     }
   },
   {
     "model": "app.City",
+    "pk": 5,
     "fields": {
       "name": "Нижний Новгород"
     }
   },
   {
     "model": "app.City",
+    "pk": 6,
     "fields": {
       "name": "Казань"
     }
   },
   {
     "model": "app.City",
+    "pk": 7,
     "fields": {
       "name": "Челябинск"
     }
   },
   {
     "model": "app.City",
+    "pk": 8,
     "fields": {
       "name": "Омск"
     }
   },
   {
     "model": "app.City",
+    "pk": 9,
     "fields": {
       "name": "Самара"
     }
   },
   {
     "model": "app.City",
+    "pk": 10,
     "fields": {
       "name": "Ростов-на-Дону"
     }
   },
   {
     "model": "app.City",
+    "pk": 11,
     "fields": {
       "name": "Уфа"
     }
   },
   {
     "model": "app.City",
+    "pk": 12,
     "fields": {
       "name": "Красноярск"
     }
   },
   {
     "model": "app.City",
+    "pk": 13,
     "fields": {
       "name": "Пермь"
     }
   },
   {
     "model": "app.City",
+    "pk": 14,
     "fields": {
       "name": "Воронеж"
     }
   },
   {
     "model": "app.City",
+    "pk": 15,
     "fields": {
       "name": "Волгоград"
     }
   },
   {
     "model": "app.City",
+    "pk": 16,
     "fields": {
       "name": "Краснодар"
     }
   },
   {
     "model": "app.City",
+    "pk": 17,
     "fields": {
       "name": "Саратов"
     }
   },
   {
     "model": "app.City",
+    "pk": 18,
     "fields": {
       "name": "Тюмень"
     }
   },
 
+
+
+
+
   {
     "model": "app.ProductCategory",
+    "pk": 1,
     "fields": {
       "name": "Техника"
     }
   },
   {
     "model": "app.ProductCategory",
+    "pk": 2,
     "fields": {
       "name": "Одежда"
+    }
+  },
+
+
+
+
+  {
+    "model": "app.Path",
+    "pk": 1,
+    "fields": {
+      "point_a": 1,
+      "point_b": 2,
+      "time": 5,
+      "price": 100,
+      "length": 10
+    }
+  },
+  {
+    "model": "app.Path",
+    "pk": 2,
+    "fields": {
+      "point_a": 1,
+      "point_b": 4,
+      "time": 4,
+      "price": 100,
+      "length": 10
+    }
+  },
+  {
+    "model": "app.Path",
+    "pk": 3,
+    "fields": {
+      "point_a": 2,
+      "point_b": 6,
+      "time": 1,
+      "price": 100,
+      "length": 10
+    }
+  },
+  {
+    "model": "app.Path",
+    "pk": 4,
+    "fields": {
+      "point_a": 2,
+      "point_b": 3,
+      "time": 3,
+      "price": 100,
+      "length": 10
+    }
+  },
+  {
+    "model": "app.Path",
+    "pk": 5,
+    "fields": {
+      "point_a": 3,
+      "point_b": 7,
+      "time": 5,
+      "price": 100,
+      "length": 10
+    }
+  },
+  {
+    "model": "app.Path",
+    "pk": 6,
+    "fields": {
+      "point_a": 3,
+      "point_b": 8,
+      "time": 4,
+      "price": 100,
+      "length": 10
+    }
+  },
+  {
+    "model": "app.Path",
+    "pk": 7,
+    "fields": {
+      "point_a": 4,
+      "point_b": 6,
+      "time": 3,
+      "price": 100,
+      "length": 10
+    }
+  },
+  {
+    "model": "app.Path",
+    "pk": 8,
+    "fields": {
+      "point_a": 5,
+      "point_b": 6,
+      "time": 2,
+      "price": 100,
+      "length": 10
+    }
+  },
+  {
+    "model": "app.Path",
+    "pk": 9,
+    "fields": {
+      "point_a": 5,
+      "point_b": 8,
+      "time": 2,
+      "price": 100,
+      "length": 10
+    }
+  },
+  {
+    "model": "app.Path",
+    "pk": 10,
+    "fields": {
+      "point_a": 6,
+      "point_b": 7,
+      "time": 9,
+      "price": 100,
+      "length": 10
+    }
+  },
+  {
+    "model": "app.Path",
+    "pk": 11,
+    "fields": {
+      "point_a": 7,
+      "point_b": 8,
+      "time": 1,
+      "price": 100,
+      "length": 10
+    }
+  },
+
+
+    {
+    "model": "app.User",
+    "pk": 3,
+    "fields": {
+      "username": "manufacter",
+      "email": "manufacter@mail.ru",
+      "password": "pbkdf2_sha256$720000$lgB84OEspINxzQ4TcHnwIu$NVlBod7Yvl91Ewu0Z66VBK9XC9TdwERgSNWFQusnGV0=",
+      "groups": [
+        2
+      ],
+      "paths": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    }
+  },
+  {
+    "model": "app.ProductCompany",
+    "pk": 1,
+    "fields": {
+      "name": "Samsung",
+      "category": 1,
+      "company": 3
+    }
+  },
+  {
+    "model": "app.ProductCompany",
+    "pk": 2,
+    "fields": {
+      "name": "Apple",
+      "category": 1,
+      "company": 3
+    }
+  },
+  {
+    "model": "app.ProductCompany",
+    "pk": 3,
+    "fields": {
+      "name": "Xiaomi",
+      "category": 1,
+      "company": 3
+    }
+  },
+  {
+    "model": "app.PointInCity",
+    "pk": 1,
+    "fields": {
+      "city": 1,
+      "type": "warehouse",
+      "company": 3
+    }
+  },
+  {
+    "model": "app.PointInCity",
+    "pk": 2,
+    "fields": {
+      "city": 8,
+      "type": "pickup_point",
+      "company": 3
+    }
+  },
+  {
+    "model": "app.ProductInWarehouse",
+    "pk": 1,
+    "fields": {
+      "product": 1,
+      "warehouse": 1,
+      "count": 10
+    }
+  },
+
+
+
+
+
+  {
+    "model": "app.User",
+    "pk": 4,
+    "fields": {
+      "username": "customer",
+      "email": "customer@mail.ru",
+      "password": "pbkdf2_sha256$720000$lgB84OEspINxzQ4TcHnwIu$NVlBod7Yvl91Ewu0Z66VBK9XC9TdwERgSNWFQusnGV0=",
+      "groups": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "app.CartProduct",
+    "pk": 1,
+    "fields": {
+      "product": 1,
+      "count": 5
+    }
+  },
+  {
+    "model": "app.Cart",
+    "pk": 1,
+    "fields": {
+      "user": 4,
+      "products": [
+        1
+      ]
     }
   }
 ]

@@ -22,6 +22,7 @@ class ProductCategory(models.Model):
 
 
 class ProductCompany(models.Model):
+    # TODO: убрать уникальность для названия
     name = models.CharField(
         verbose_name='Название',
         max_length=255,
@@ -60,7 +61,9 @@ class ProductCompany(models.Model):
     category = models.ForeignKey(
         verbose_name='Категория',
         to='ProductCategory',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
     )
     is_available = models.BooleanField(
         verbose_name='Доступность для покупателя',
@@ -119,6 +122,10 @@ class PointInCity(models.Model):
         on_delete=models.CASCADE
     )
 
+    @classmethod
+    def get_warehouse_by_city_name(cls, city_name, company):
+        return cls.objects.get(city__name=city_name, type=PointType.WAREHOUSE, company=company)
+
     class Meta:
         ordering = ('id',)
         verbose_name = 'Точка в городе'
@@ -150,7 +157,7 @@ class ProductInWarehouse(models.Model):
         verbose_name_plural = 'Изделия на складах'
 
     def __str__(self):
-        return f'id: {self.id}, product: {self.product.name}, warehouse: {self.warehouse.city.name}'
+        return f'id: {self.id}, product: {self.product.name}, warehouse: {self.warehouse.city.name} count: {self.count}'
 
 
 class PathType(models.TextChoices):
@@ -202,19 +209,18 @@ class Path(models.Model):
         verbose_name_plural = 'Пути'
 
     def __str__(self):
-        return f'id: {self.id}, point_a: {self.point_a.name}, point_b: {self.point_b.name}'
+        return f'id: {self.id}, point_a: {self.point_a.name}, point_b: {self.point_b.name} type: {self.type}'
 
 
-class PathGroup(models.Model):
+class GroupPath(models.Model):
     path = models.ForeignKey(
         verbose_name='Путь',
         to='Path',
         on_delete=models.CASCADE
     )
-    group = models.ForeignKey(
-        verbose_name='Группа путей',
-        to='GroupPaths',
-        on_delete=models.CASCADE,
+    is_reversed = models.BooleanField(
+        verbose_name='Обратный путь',
+        default=False
     )
 
     class Meta:
@@ -223,16 +229,36 @@ class PathGroup(models.Model):
         verbose_name_plural = 'Пути заказа'
 
     def __str__(self):
+        return f'id: {self.id}, path: {self.path.point_a.name} -> {self.path.point_b.name}, product: {self.product.name}, count: {self.count}'
+
+
+class GroupPathsRelation(models.Model):
+    group_paths = models.ForeignKey(
+        verbose_name='Группа путей',
+        to='GroupPaths',
+        on_delete=models.CASCADE
+    )
+    group_path = models.ForeignKey(
+        verbose_name='Путь заказа',
+        to='GroupPath',
+        on_delete=models.CASCADE
+    )
+
+    class Meta:
+        ordering = ('id',)
+        verbose_name = 'Связь группы путей и пути заказа'
+        verbose_name_plural = 'Связи группы путей и пути заказа'
+
+    def __str__(self):
         return f'id: {self.id}'
 
 
 class GroupPaths(models.Model):
     paths = models.ManyToManyField(
         verbose_name='Пути',
-        to='Path',
-        through='PathGroup',
+        to='GroupPath',
+        through='GroupPathsRelation'
     )
-
     product = models.ForeignKey(
         verbose_name='Изделие производства',
         to='ProductCompany',
@@ -257,10 +283,9 @@ class SearchInfo(models.Model):
         to='User',
         on_delete=models.CASCADE
     )
-    group_paths = models.ForeignKey(
-        verbose_name='Группа путей',
-        to='GroupPaths',
-        on_delete=models.CASCADE
+    groups_paths = models.ManyToManyField(
+        verbose_name='Группы путей',
+        to='GroupPaths'
     )
 
 
@@ -348,7 +373,7 @@ class CartProduct(models.Model):
         verbose_name_plural = 'Товары в корзине'
 
     def __str__(self):
-        return f'id: {self.id}, product: {self.product.name}'
+        return f'id: {self.id}, product: {self.product.name} count: {self.count}'
 
 
 class Cart(models.Model):

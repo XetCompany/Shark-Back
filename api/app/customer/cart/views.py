@@ -2,8 +2,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.app.customer.cart.serializers import CartProductSerializer, CartProductAddSerializer
-from app.models import Cart, ProductCompany
+from api.app.customer.cart.serializers import (
+    CartProductSerializer, CartProductAddSerializer,
+    CartProductUpdateSerializer,
+)
+from app.models import Cart, ProductCompany, SearchInfo
 
 
 class CartView(APIView):
@@ -20,12 +23,12 @@ class CartProductView(APIView):
 
     def post(self, request, product_id):
         product = ProductCompany.objects.get(id=product_id)
+        cart = Cart.objects.get_or_create(user=request.user)[0]
 
-        serializer = CartProductAddSerializer(data=request.data, context={'product': product})
+        serializer = CartProductAddSerializer(data=request.data, context={'product': product, 'cart': cart})
         serializer.is_valid(raise_exception=True)
         cart_product = serializer.save()
 
-        cart = Cart.objects.get_or_create(user=request.user)[0]
         cart.products.add(cart_product)
 
         return Response(serializer.data)
@@ -33,7 +36,7 @@ class CartProductView(APIView):
     def put(self, request, product_id):
         cart = Cart.objects.get(user=request.user)
         cart_product = cart.get_cart_product(product_id)
-        serializer = CartProductAddSerializer(cart_product, data=request.data, partial=True)
+        serializer = CartProductUpdateSerializer(cart_product, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response()
