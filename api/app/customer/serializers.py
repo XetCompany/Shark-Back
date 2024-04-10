@@ -3,7 +3,7 @@ from rest_framework import serializers
 from api.app.common.serializers import (
     ProductCompanySerializer, CitySerializer,
 )
-from api.app.customer.products.utils import user_can_comment_product
+from api.app.customer.products.utils import user_can_comment_product, user_can_add_product_to_cart
 from app.models import Path, GroupPaths, SearchInfo, GroupPath
 
 
@@ -54,4 +54,5 @@ class ProductCompanyCustomerSerializer(ProductCompanySerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['is_need_comment'] = user_can_comment_product(self.context['user'], instance)
+        data['is_can_add_to_cart'] = user_can_add_product_to_cart(self.context['user'], instance)
         return data

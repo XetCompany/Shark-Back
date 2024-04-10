@@ -1,4 +1,4 @@
-from app.models import ProductCompany, User, Order, OrderStatus
+from app.models import ProductCompany, User, Order, OrderStatus, Cart, CartProduct
 
 
 def user_can_comment_product(user: User, product: ProductCompany):
@@ -10,3 +10,11 @@ def user_can_comment_product(user: User, product: ProductCompany):
     ).exists()
     is_commented = product.evaluations.filter(author=user).exists()
     return is_order and not is_commented
+
+
+def user_can_add_product_to_cart(user: User, product: ProductCompany):
+    if not user.is_authenticated:
+        return False
+
+    cart = Cart.objects.get_or_create(user=user)[0]
+    return not cart.products.filter(product=product).exists()
