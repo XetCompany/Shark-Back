@@ -3,12 +3,20 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from api.app.common.serializers import UserInfoSerializer
+from api.app.common.serializers import UserInfoSerializer, CitySerializer
+from app.models import City
 
 
+@extend_schema(responses=UserInfoSerializer)
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
-@extend_schema(responses=UserInfoSerializer)
 def account_view(request):
     serializer = UserInfoSerializer(request.user)
+    return Response(serializer.data)
+
+
+@extend_schema(responses=CitySerializer(many=True))
+@api_view(['GET'])
+def cities_view(request):
+    serializer = CitySerializer(City.objects.all(), many=True)
     return Response(serializer.data)
