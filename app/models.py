@@ -78,6 +78,7 @@ class ProductCompany(models.Model):
     evaluations = models.ManyToManyField(
         verbose_name='Оценки и комментарии',
         to='EvaluationAndComment',
+        blank=True
     )
 
     @property
