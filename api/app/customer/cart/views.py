@@ -42,10 +42,7 @@ class CartProductView(APIView):
         cart_product = cart.get_cart_product(product_id)
         serializer = CartProductUpdateSerializer(cart_product, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-        if serializer.validated_data['count'] == 0:
-            cart.products.remove(cart_product)
-        else:
-            serializer.save()
+        serializer.save()
         return Response()
 
     @extend_schema(responses={204: None})
