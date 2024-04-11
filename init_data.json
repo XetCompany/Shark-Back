@@ -378,6 +378,24 @@
   },
   {
     "model": "app.PointInCity",
+    "pk": 3,
+    "fields": {
+      "city": 2,
+      "type": "warehouse",
+      "company": 3
+    }
+  },
+  {
+    "model": "app.PointInCity",
+    "pk": 4,
+    "fields": {
+      "city": 3,
+      "type": "warehouse",
+      "company": 3
+    }
+  },
+  {
+    "model": "app.PointInCity",
     "pk": 2,
     "fields": {
       "city": 8,
@@ -392,6 +410,24 @@
       "product": 1,
       "warehouse": 1,
       "count": 10
+    }
+  },
+  {
+    "model": "app.ProductInWarehouse",
+    "pk": 2,
+    "fields": {
+      "product": 1,
+      "warehouse": 3,
+      "count": 10
+    }
+  },
+  {
+    "model": "app.ProductInWarehouse",
+    "pk": 3,
+    "fields": {
+      "product": 1,
+      "warehouse": 4,
+      "count": 20
     }
   },
 
@@ -416,7 +452,7 @@
     "pk": 1,
     "fields": {
       "product": 1,
-      "count": 5
+      "count": 15
     }
   },
   {
