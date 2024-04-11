@@ -1,4 +1,5 @@
 from drf_spectacular.utils import extend_schema
+from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -30,8 +31,6 @@ class PathView(APIView):
 
 
 class PathExcelView(APIView):
-    permission_classes = [IsAuthenticated]
-
     def get(self, request):
         """
         Получение шаблона для загрузки путей
@@ -39,6 +38,7 @@ class PathExcelView(APIView):
         return get_pattern_excel()
 
     @extend_schema(request=ImportExcelSerializer)
+    @permission_classes([IsAuthenticated])
     def post(self, request):
         """
         Загрузка путей из excel
