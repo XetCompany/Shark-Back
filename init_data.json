@@ -372,6 +372,7 @@
     "pk": 1,
     "fields": {
       "city": 1,
+      "name": "Московский Леонидовский Склад",
       "type": "warehouse",
       "company": 3
     }
@@ -381,6 +382,7 @@
     "pk": 3,
     "fields": {
       "city": 2,
+      "name": "Склад развала ССР",
       "type": "warehouse",
       "company": 3
     }
@@ -390,6 +392,7 @@
     "pk": 4,
     "fields": {
       "city": 3,
+      "name": "Склад на Новосибиском",
       "type": "warehouse",
       "company": 3
     }
@@ -399,6 +402,7 @@
     "pk": 2,
     "fields": {
       "city": 8,
+      "name": "Львовская точка",
       "type": "pickup_point",
       "company": 3
     }
