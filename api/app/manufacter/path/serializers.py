@@ -25,6 +25,10 @@ class PathCreateSerializer(serializers.ModelSerializer):
         return data
 
 
+class PathsDeleteSerializer(serializers.Serializer):
+    paths = serializers.ListField(child=serializers.IntegerField())
+
+
 class PathEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = Path

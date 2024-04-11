@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 
 from .serializers import (
     PathInfoSerializer, PathEditSerializer,
-    PathCreateSerializer, ImportExcelSerializer,
+    PathCreateSerializer, ImportExcelSerializer, PathsDeleteSerializer,
 )
 from .utils import import_from_excel, get_pattern_excel
 
@@ -28,6 +28,14 @@ class PathView(APIView):
         path = serializer.save()
         user.paths.add(path)
         return Response(serializer.data)
+
+    @extend_schema(request=PathsDeleteSerializer, responses={204: None})
+    def delete(self, request):
+        serializer = PathsDeleteSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        paths = request.user.paths.filter(id__in=serializer.validated_data['paths'])
+        paths.delete()
+        return Response(status=204)
 
 
 class PathExcelView(APIView):
