@@ -86,8 +86,10 @@ class PointProductDetailView(APIView):
 
     @extend_schema(responses={204: None})
     def delete(self, request, point_id, product_id):
+        product = ProductCompany.objects.get(company=request.user, id=product_id)
+        warehouse = PointInCity.objects.get(company=request.user, id=point_id)
         product = ProductInWarehouse.objects.get(
-            id=product_id, warehouse__point__id=point_id, warehouse__point__company=request.user
+            warehouse=warehouse, product=product
         )
         product.delete()
         return Response(status=204)
