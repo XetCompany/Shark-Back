@@ -4,7 +4,7 @@ from django.core.files.base import ContentFile
 from rest_framework import serializers
 
 
-class FileBase64Field(serializers.ImageField):
+class BaseBase64FieldMixin:
     def __init__(self, *, base64_type="", **kwargs):
         self.base64_type = base64_type
         super().__init__(**kwargs)
@@ -17,3 +17,11 @@ class FileBase64Field(serializers.ImageField):
             format, filestr = file_data.split(';base64,')
             data_file = ContentFile(base64.b64decode(filestr), name=filename)
         return super().to_internal_value(data_file)
+
+
+class FileBase64Field(BaseBase64FieldMixin, serializers.FileField):
+    pass
+
+
+class ImageBase64Field(BaseBase64FieldMixin, serializers.ImageField):
+    pass
