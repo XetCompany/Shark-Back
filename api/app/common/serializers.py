@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers
 
-from app.models import User, ProductCompany, EvaluationAndComment, City
+from app.models import User, ProductCompany, EvaluationAndComment, City, ProductCategory
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
@@ -38,4 +38,10 @@ class ProductCompanySerializer(serializers.ModelSerializer):
 class CitySerializer(serializers.ModelSerializer):
     class Meta:
         model = City
+        fields = '__all__'
+
+
+class ProductCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductCategory
         fields = '__all__'

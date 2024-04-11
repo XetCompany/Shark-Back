@@ -3,8 +3,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from api.app.common.serializers import UserInfoSerializer, CitySerializer
-from app.models import City
+from api.app.common.serializers import UserInfoSerializer, CitySerializer, ProductCategorySerializer
+from app.models import City, ProductCategory
 
 
 @extend_schema(responses=UserInfoSerializer)
@@ -19,4 +19,11 @@ def account_view(request):
 @api_view(['GET'])
 def cities_view(request):
     serializer = CitySerializer(City.objects.all(), many=True)
+    return Response(serializer.data)
+
+
+@extend_schema(responses=ProductCategorySerializer(many=True))
+@api_view(['GET'])
+def categories_view(request):
+    serializer = ProductCategorySerializer(ProductCategory.objects.all(), many=True)
     return Response(serializer.data)
