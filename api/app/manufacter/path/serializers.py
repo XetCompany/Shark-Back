@@ -1,6 +1,7 @@
 from django.db.models import Q
 from rest_framework import serializers
 
+from api.app.common.fields import FileBase64Field
 from api.app.common.serializers import CitySerializer
 from app.models import Path, City
 
@@ -41,7 +42,7 @@ class PathInfoSerializer(serializers.ModelSerializer):
 
 
 class ImportExcelSerializer(serializers.Serializer):
-    excel = serializers.FileField()
+    excel = FileBase64Field()
 
 
 class PatternExcelSerializer(serializers.Serializer):
