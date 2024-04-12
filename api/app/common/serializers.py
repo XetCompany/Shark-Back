@@ -6,7 +6,7 @@ from app.models import User, ProductCompany, EvaluationAndComment, City, Product
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
-    photo = ImageBase64Field(required=False, base64_type='image')
+    image = ImageBase64Field(required=False, base64_type='image')
 
     class Meta:
         model = User
@@ -19,7 +19,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 
 class UserInfoEditSerializer(serializers.ModelSerializer):
-    photo = ImageBase64Field(required=False, base64_type='image')
+    image = ImageBase64Field(required=False, base64_type='image')
 
     class Meta:
         model = User
