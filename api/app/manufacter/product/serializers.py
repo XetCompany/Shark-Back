@@ -6,7 +6,7 @@ from app.models import ProductCompany
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    photo = ImageBase64Field(required=False, base64_type='image')
+    photo = ImageBase64Field(required=False, base64_type='image', allow_null=True)
     evaluations = EvaluationAndCommentSerializer(many=True, read_only=True)
 
     class Meta:

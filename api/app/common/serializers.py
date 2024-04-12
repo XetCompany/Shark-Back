@@ -19,7 +19,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 
 class UserInfoEditSerializer(serializers.ModelSerializer):
-    image = ImageBase64Field(required=False, base64_type='image')
+    image = ImageBase64Field(required=False, base64_type='image', allow_null=True)
 
     class Meta:
         model = User
