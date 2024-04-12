@@ -13,6 +13,11 @@ class ProductSerializer(serializers.ModelSerializer):
         model = ProductCompany
         exclude = ('company',)
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['average_rating'] = instance.avg_evaluation
+        return data
+
     def create(self, validated_data):
         company = self.context['company']
         return super().create({**validated_data, 'company': company})
