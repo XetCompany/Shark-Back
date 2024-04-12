@@ -16,9 +16,11 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 
 class EvaluationAndCommentSerializer(serializers.ModelSerializer):
+    author = UserInfoSerializer()
+
     class Meta:
         model = EvaluationAndComment
-        exclude = ('author',)
+        fields = '__all__'
 
 
 class ProductCompanySerializer(serializers.ModelSerializer):
