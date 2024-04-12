@@ -49,3 +49,28 @@ class RegisterSerializer(serializers.Serializer):
         user.add_group(role)
 
         return user
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(max_length=255)
+    new_password = serializers.CharField(max_length=255)
+
+    def validate_old_password(self, value):
+        if not self.context['request'].user.check_password(value):
+            raise serializers.ValidationError('Неверный пароль')
+        return value
+
+    def validate_new_password(self, value):
+        django_validate_password(value)
+        return value
+
+    def validate(self, attrs):
+        if attrs['old_password'] == attrs['new_password']:
+            raise serializers.ValidationError('Новый пароль не должен совпадать со старым')
+        return attrs
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        user.set_password(validated_data['new_password'])
+        user.save()
+        return user
