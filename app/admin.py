@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from app.models import *
 
-all_models = [ProductCategory, ProductCompany, City, PointInCity, ProductInWarehouse, Path, GroupPath, GroupPathsRelation, GroupPaths, SearchInfo, OrderProduct, Order, CartProduct, Cart, User, ResetPasswordToken]
+all_models = [ProductCategory, ProductCompany, City, PointInCity, ProductInWarehouse, Path, GroupPath, GroupPathsRelation, GroupPaths, SearchInfo, OrderProduct, Order, CartProduct, Cart, User, ResetPasswordToken, EvaluationAndComment]
 
 # Register your models here.
 for model in all_models:
