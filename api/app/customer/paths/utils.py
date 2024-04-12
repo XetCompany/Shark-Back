@@ -62,6 +62,7 @@ def get_warehouses_products_details_for_paths(cart, company, sorted_shortest_pat
 
         if not cart_products:
             warehouses_details.append(warehouses_detail)
+            warehouses_detail = []
             cart_products = get_dict_products_from_cart(cart)
 
     return warehouses_details
