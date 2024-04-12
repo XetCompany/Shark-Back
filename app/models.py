@@ -207,6 +207,7 @@ class PathType(models.TextChoices):
     SEA = 'sea', 'Морской'
     RIVER = 'river', 'Речной'
     AIR = 'air', 'Воздушный'
+    INSTANT = 'instant', 'Мгновенный'
 
 
 converter_path_type = {
@@ -308,6 +309,18 @@ class GroupPaths(models.Model):
         verbose_name='Пути',
         to='GroupPath',
         through='GroupPathsRelation'
+    )
+    is_instant_delivery = models.BooleanField(
+        verbose_name='Мгновенная доставка',
+        default=False
+    )
+    instant_city = models.ForeignKey(
+        verbose_name='Город мгновенной доставки',
+        to='City',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        default=None
     )
     product = models.ForeignKey(
         verbose_name='Изделие производства',

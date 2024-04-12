@@ -24,7 +24,8 @@ class GroupPathSerializer(serializers.ModelSerializer):
 
         if data['is_reversed']:
             data['path']['point_a'], data['path']['point_b'] = data['path']['point_b'], data['path']['point_a']
-            data.pop('is_reversed')
+
+        data.pop('is_reversed')
 
         return data
 
@@ -37,9 +38,33 @@ class GroupPathsSerializer(serializers.ModelSerializer):
     paths = GroupPathSerializer(many=True)
     product = ProductCompanySerializer()
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if instance.is_instant_delivery and instance.instant_city:
+            instant_path = PathSerializer(
+                data={
+                    'point_a': CitySerializer(instance=instance.instant_city).data,
+                    'point_b': CitySerializer(instance=instance.instant_city).data,
+                    'length': 0,
+                    'time': 0,
+                    'price': 0,
+                    'type': 'instant',
+                },
+            )
+            instant_path.is_valid()
+            instant_group_path = GroupPathSerializer(
+                data={
+                    'path': instant_path.data,
+                    'is_reversed': False,
+                },
+            )
+            instant_group_path.is_valid()
+            data['paths'].append(instant_group_path.data)
+        return data
+
     class Meta:
         model = GroupPaths
-        exclude = ('id',)
+        exclude = ('id', 'is_instant_delivery', 'instant_city')
 
 
 class SearchInfoSerializer(serializers.ModelSerializer):

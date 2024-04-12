@@ -109,6 +109,11 @@ def generate_search_infos(warehouses_details, cart, company):
                         group_path=group_path,
                     )
 
+                if not warehouse_detail['paths_info']:
+                    group_paths.is_instant_delivery = True
+                    group_paths.instant_city = City.objects.get(name=warehouse_detail['city'])
+                    group_paths.save()
+
                 search_info.groups_paths.add(group_paths)
 
 
