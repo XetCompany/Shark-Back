@@ -1,18 +1,29 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers
 
+from api.app.common.fields import ImageBase64Field
 from app.models import User, ProductCompany, EvaluationAndComment, City, ProductCategory
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
+    photo = ImageBase64Field(required=False, base64_type='image')
+
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'groups',)
+        fields = ('id', 'username', 'email', 'fullname', 'phone', 'description', 'image', 'groups',)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['groups'] = Group.objects.filter(user=instance).values_list('name', flat=True)
         return representation
+
+
+class UserInfoEditSerializer(serializers.ModelSerializer):
+    photo = ImageBase64Field(required=False, base64_type='image')
+
+    class Meta:
+        model = User
+        fields = ('username', 'fullname', 'phone', 'description', 'image')
 
 
 class EvaluationAndCommentSerializer(serializers.ModelSerializer):

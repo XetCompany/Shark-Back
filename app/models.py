@@ -491,7 +491,8 @@ class User(AbstractUser):
         verbose_name='ФИО',
         max_length=255,
         blank=True,
-        null=True
+        null=True,
+        default=None
     )
     phone = PhoneNumberField(
         verbose_name='Телефон',
@@ -503,7 +504,15 @@ class User(AbstractUser):
         verbose_name='Описание',
         max_length=255,
         blank=True,
-        null=True
+        null=True,
+        default=None
+    )
+    image = models.ImageField(
+        verbose_name='Фото',
+        upload_to='users/',
+        blank=True,
+        null=True,
+        default=None
     )
 
     paths = models.ManyToManyField(

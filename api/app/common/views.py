@@ -2,17 +2,29 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from api.app.common.serializers import UserInfoSerializer, CitySerializer, ProductCategorySerializer
+from api.app.common.serializers import (
+    UserInfoSerializer, CitySerializer, ProductCategorySerializer,
+    UserInfoEditSerializer,
+)
 from app.models import City, ProductCategory
 
 
-@extend_schema(responses=UserInfoSerializer)
-@api_view(['GET'])
-@permission_classes((IsAuthenticated,))
-def account_view(request):
-    serializer = UserInfoSerializer(request.user)
-    return Response(serializer.data)
+class AccountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(responses=UserInfoSerializer)
+    def get(self, request):
+        serializer = UserInfoSerializer(request.user)
+        return Response(serializer.data)
+
+    @extend_schema(request=UserInfoEditSerializer, responses=UserInfoEditSerializer)
+    def put(self, request):
+        serializer = UserInfoEditSerializer(request.user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
 
 @extend_schema(responses=CitySerializer(many=True))
