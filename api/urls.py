@@ -10,13 +10,9 @@ schema_url_patterns = [
     path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
 
-def view(request):
-    return HttpResponse('Hello, World!')
-
 urlpatterns = [
     path('auth/', include('api.auth.urls')),
     path('app/', include('api.app.urls')),
-    path('view/', view),
 
     path('schema/', include(schema_url_patterns)),
 ]
