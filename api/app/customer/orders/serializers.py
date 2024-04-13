@@ -19,7 +19,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['total_price'] = sum([product['product']['price'] * product['count'] for product in data['products']])
+        data['total_price'] = sum([float(product['product']['price']) * product['count'] for product in data['products']])
         return data
 
     class Meta:
