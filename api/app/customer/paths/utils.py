@@ -82,7 +82,7 @@ def get_warehouses_products_details_for_paths(
 def filtering_paths_info(paths_info, filters):
     total_price = sum([path_info[0].price for path_info in paths_info])
     total_time = sum([path_info[0].time for path_info in paths_info])
-    total_distance = sum([path_info[0].distance for path_info in paths_info])
+    total_distance = sum([path_info[0].length for path_info in paths_info])
 
     if filters['min_price'] and total_price < filters['min_price']:
         return False
