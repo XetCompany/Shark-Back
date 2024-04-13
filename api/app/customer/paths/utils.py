@@ -84,22 +84,22 @@ def filtering_paths_info(paths_info, filters):
     total_time = sum([path_info[0].time for path_info in paths_info])
     total_distance = sum([path_info[0].length for path_info in paths_info])
 
-    if filters['min_price'] is not None and total_price < filters['min_price']:
+    if filters['min_price'] != "null" and total_price < float(filters['min_price']):
         return False
 
-    if filters['max_price'] is not None and total_price > filters['max_price']:
+    if filters['max_price'] != "null" and total_price > float(filters['max_price']):
         return False
 
-    if filters['min_time'] is not None and total_time < filters['min_time']:
+    if filters['min_time'] != "null" and total_time < float(filters['min_time']):
         return False
 
-    if filters['max_time'] is not None and total_time > filters['max_time']:
+    if filters['max_time'] != "null" and total_time > float(filters['max_time']):
         return False
 
-    if filters['min_distance'] is not None and total_distance < filters['min_distance']:
+    if filters['min_distance'] != "null" and total_distance < float(filters['min_distance']):
         return False
 
-    if filters['max_distance'] is not None and total_distance > filters['max_distance']:
+    if filters['max_distance'] != "null" and total_distance > float(filters['max_distance']):
         return False
 
     return True
