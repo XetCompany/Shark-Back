@@ -71,7 +71,7 @@ def get_warehouses_products_details_for_paths(
                 }
             )
 
-        if not cart_products:
+        if not cart_products and warehouses_detail:
             warehouses_details.append(warehouses_detail)
             warehouses_detail = []
             cart_products = get_dict_products_from_cart(cart)
