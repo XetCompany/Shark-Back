@@ -2,7 +2,7 @@ from django.contrib.auth.models import Group
 from rest_framework import serializers
 
 from api.app.common.fields import ImageBase64Field
-from app.models import User, ProductCompany, EvaluationAndComment, City, ProductCategory
+from app.models import User, ProductCompany, EvaluationAndComment, City, ProductCategory, Notification
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
@@ -58,3 +58,9 @@ class ProductCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductCategory
         fields = '__all__'
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        exclude = ('user',)

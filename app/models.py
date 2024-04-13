@@ -582,3 +582,40 @@ class ResetPasswordToken(models.Model):
 
     def __str__(self):
         return f'id: {self.id}, user: {self.user.username}'
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(
+        verbose_name='Пользователь',
+        to='User',
+        on_delete=models.CASCADE
+    )
+    text = models.TextField(
+        verbose_name='Текст'
+    )
+    type = models.CharField(
+        verbose_name='Тип уведомления',
+        max_length=255
+    )
+    additional_data = models.JSONField(
+        verbose_name='Дополнительные данные',
+        blank=True,
+        null=True,
+        default=None
+    )
+    is_read = models.BooleanField(
+        verbose_name='Прочитано',
+        default=False
+    )
+    created_at = models.DateTimeField(
+        verbose_name='Время создания',
+        auto_now_add=True
+    )
+
+    class Meta:
+        ordering = ('id',)
+        verbose_name = 'Уведомление'
+        verbose_name_plural = 'Уведомления'
+
+    def __str__(self):
+        return f'id: {self.id}, user: {self.user.username}, is_read: {self.is_read}'

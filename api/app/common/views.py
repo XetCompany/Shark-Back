@@ -6,9 +6,9 @@ from rest_framework.views import APIView
 
 from api.app.common.serializers import (
     UserInfoSerializer, CitySerializer, ProductCategorySerializer,
-    UserInfoEditSerializer,
+    UserInfoEditSerializer, NotificationSerializer,
 )
-from app.models import City, ProductCategory
+from app.models import City, ProductCategory, Notification
 
 
 class AccountView(APIView):
@@ -39,3 +39,21 @@ def cities_view(request):
 def categories_view(request):
     serializer = ProductCategorySerializer(ProductCategory.objects.all(), many=True)
     return Response(serializer.data)
+
+
+class NotificationsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(responses=NotificationSerializer(many=True))
+    def get(self, request):
+        notifications = Notification.objects.filter(user=request.user)
+        serializer = NotificationSerializer(notifications, many=True)
+        return Response(serializer.data)
+
+
+class ReadNotificationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        Notification.objects.filter(user=request.user).update(is_read=True)
+        return Response()
