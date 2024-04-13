@@ -30,7 +30,12 @@ def search_paths(user: User, filters: dict, pickup_point: PointInCity, limit: in
     sorted_shortest_path = list(filter(lambda x: x[1] != sys.maxsize, sorted_shortest_path))
 
     warehouses_details = get_warehouses_products_details_for_paths(
-        cart, company, sorted_shortest_path, previous_nodes, start_node
+        cart,
+        company,
+        sorted_shortest_path,
+        previous_nodes,
+        start_node,
+        filters,
     )
     warehouses_details = warehouses_details[:limit]
     generate_search_infos(warehouses_details, cart, company)
@@ -38,7 +43,9 @@ def search_paths(user: User, filters: dict, pickup_point: PointInCity, limit: in
     return warehouses_details
 
 
-def get_warehouses_products_details_for_paths(cart, company, sorted_shortest_path, previous_nodes, start_node):
+def get_warehouses_products_details_for_paths(
+    cart, company, sorted_shortest_path, previous_nodes, start_node, filters
+):
     cart_products = get_dict_products_from_cart(cart)
     warehouses_details = []
     warehouses_detail = []
@@ -51,6 +58,10 @@ def get_warehouses_products_details_for_paths(cart, company, sorted_shortest_pat
 
         if decreased_products:
             paths_info = get_paths_from_product(target_node, previous_nodes, start_node)
+
+            is_filter = filtering_paths_info(paths_info, filters)
+            if not is_filter:
+                continue
 
             warehouses_detail.append(
                 {
@@ -66,6 +77,32 @@ def get_warehouses_products_details_for_paths(cart, company, sorted_shortest_pat
             cart_products = get_dict_products_from_cart(cart)
 
     return warehouses_details
+
+
+def filtering_paths_info(paths_info, filters):
+    total_price = sum([path_info[0].price for path_info in paths_info])
+    total_time = sum([path_info[0].time for path_info in paths_info])
+    total_distance = sum([path_info[0].distance for path_info in paths_info])
+
+    if filters['min_price'] and total_price < filters['min_price']:
+        return False
+
+    if filters['max_price'] and total_price > filters['max_price']:
+        return False
+
+    if filters['min_time'] and total_time < filters['min_time']:
+        return False
+
+    if filters['max_time'] and total_time > filters['max_time']:
+        return False
+
+    if filters['min_distance'] and total_distance < filters['min_distance']:
+        return False
+
+    if filters['max_distance'] and total_distance > filters['max_distance']:
+        return False
+
+    return True
 
 
 def decrease_products(cart_products, warehouse_products):
