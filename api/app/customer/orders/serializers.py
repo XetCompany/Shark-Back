@@ -20,11 +20,8 @@ class OrderSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['total_price'] = sum([float(product['product']['price']) * product['count'] for product in data['products']])
-        data['avg_price'] = data['total_price'] / sum([product['count'] for product in data['products']])
 
-        total_length = sum([path['length'] for group_path in data['group_paths'] for path in group_path['paths']])
-        count_paths = sum([len(group_path['paths']) for group_path in data['group_paths']])
-        data['avg_length'] = total_length / count_paths if count_paths else 0
+        data['total_length'] = sum([path['length'] for group_path in data['group_paths'] for path in group_path['paths']])
 
         return data
 
