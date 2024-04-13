@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from api.app.common.fields import ImageBase64Field
 from api.app.common.serializers import EvaluationAndCommentSerializer
+from api.app.customer.pickup_points.serializers import PickupPointSerializer
 from app.models import ProductCompany
 
 
@@ -16,6 +17,7 @@ class ProductSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['average_rating'] = instance.avg_evaluation
+        data['warehouses'] = PickupPointSerializer(instance.warehouses, many=True).data
         return data
 
     def create(self, validated_data):

@@ -89,6 +89,11 @@ class ProductCompany(models.Model):
             return 0
         return sum([evaluation.evaluation for evaluation in evaluations]) / len(evaluations)
 
+    @property
+    def warehouses(self):
+        p_w = ProductInWarehouse.objects.filter(product=self)
+        return [product_warehouse.warehouse for product_warehouse in p_w]
+
     class Meta:
         ordering = ('id',)
         verbose_name = 'Изделие производства'
