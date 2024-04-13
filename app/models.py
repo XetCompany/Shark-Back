@@ -589,6 +589,7 @@ class NotificationType:
     TYPE_EVALUATION = 'evaluation'
     TYPE_ORDER = 'order'
     TYPE_DELIVERED = 'delivered'
+    TYPE_CAN_COMMENT = 'can_comment'
 
 
 class Notification(models.Model):

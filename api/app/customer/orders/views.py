@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.app.customer.orders.serializers import OrderSerializer, OrderEditSerializer
+from api.app.customer.products.utils import user_can_comment_product
 from app.models import Order, Cart, SearchInfo, OrderStatus, ProductInWarehouse, Notification, NotificationType
 
 
@@ -28,6 +29,9 @@ class OrderSearchInfoView(APIView):
         Создание заказа на основе информации о поиске маршрута и корзины
         """
         # TODO: проверка, на доступен ли продукт во время заказа, на складу и в корзине
+        products_can_comments = []
+        for cart_product in Cart.objects.get_or_create(user=request.user)[0].products.all():
+            products_can_comments.append((cart_product.product, user_can_comment_product(request.user, cart_product.product)))
 
         # Формирование заказа
         cart = Cart.objects.get_or_create(user=request.user)[0]
@@ -85,6 +89,18 @@ class OrderSearchInfoView(APIView):
             type=NotificationType.TYPE_DELIVERED,
             additional_data={'order_id': order.id},
         )
+
+        for product, can_comment in products_can_comments:
+            if can_comment:
+                continue
+            now_can_comment = user_can_comment_product(request.user, product)
+            if now_can_comment:
+                Notification.objects.create(
+                    user=request.user,
+                    text=f'Теперь вы можете оставить отзыв на продукт {product.name}',
+                    type=NotificationType.TYPE_CAN_COMMENT,
+                    additional_data={'product_id': product.id},
+                )
 
         return Response(OrderSerializer(order).data)
 
