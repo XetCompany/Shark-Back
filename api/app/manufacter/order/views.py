@@ -13,5 +13,6 @@ class OrderView(APIView):
     @extend_schema(responses=OrderSerializer(many=True))
     def get(self, request):
         orders = Order.objects.filter(products__product__company=request.user).all()
+        orders = list(set(orders))
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)
