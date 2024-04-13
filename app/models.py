@@ -3,6 +3,7 @@ from datetime import timedelta, datetime
 from django.contrib.auth.models import AbstractUser, Group
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from django.utils import timezone
 
 
 class ProductCategory(models.Model):
@@ -432,6 +433,10 @@ class Order(models.Model):
         verbose_name='Пользователь',
         to='User',
         on_delete=models.CASCADE
+    )
+    created_at = models.DateTimeField(
+        verbose_name='Время создания',
+        auto_now_add=True,
     )
 
     class Meta:
