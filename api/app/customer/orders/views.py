@@ -90,6 +90,7 @@ class OrderSearchInfoView(APIView):
             additional_data={'order_id': order.id},
         )
 
+        # Никогда не сработает???
         for product, can_comment in products_can_comments:
             if can_comment:
                 continue
@@ -120,10 +121,28 @@ class OrderStatusView(APIView):
     @extend_schema(request=OrderEditSerializer, responses=OrderSerializer)
     def post(self, request, order_id):
         order = Order.objects.get(id=order_id, user=request.user)
+
+        products_can_comments = []
+        for order_product in order.products.all():
+            products_can_comments.append((order_product.product, user_can_comment_product(request.user, order_product.product)))
+
         serializer = OrderEditSerializer(data=request.data, context={'order': order})
         serializer.is_valid(raise_exception=True)
         order.status = serializer.validated_data['status']
         order.decline_reason = serializer.validated_data.get('decline_reason')
         order.save()
+
+        for product, can_comment in products_can_comments:
+            if can_comment:
+                continue
+            now_can_comment = user_can_comment_product(request.user, product)
+            if now_can_comment:
+                Notification.objects.create(
+                    user=request.user,
+                    text=f'Теперь вы можете оставить отзыв на продукт {product.name}',
+                    type=NotificationType.TYPE_CAN_COMMENT,
+                    additional_data={'product_id': product.id},
+                )
+
         return Response(OrderSerializer(order).data)
 
