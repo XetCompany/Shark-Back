@@ -337,7 +337,7 @@ class GroupPaths(models.Model):
     )
 
     def get_copy(self):
-        group_paths = GroupPaths.objects.create(product=self.product, count=self.count, warehouse=self.warehouse)
+        group_paths = GroupPaths.objects.create(product=self.product, count=self.count, warehouse=self.warehouse, is_instant_delivery=self.is_instant_delivery, instant_city=self.instant_city)
         for group_path in self.paths.all():
             GroupPathsRelation.objects.create(group_paths=group_paths, group_path=group_path)
         return group_paths
