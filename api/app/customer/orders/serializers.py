@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.app.common.serializers import ProductCompanySerializer
+from api.app.common.serializers import ProductCompanySerializer, UserInfoSerializer
 from api.app.customer.serializers import GroupPathsSerializer
 from app.models import Order, OrderProduct, OrderStatus
 
@@ -16,6 +16,7 @@ class OrderProductSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     products = OrderProductSerializer(many=True)
     group_paths = GroupPathsSerializer(many=True)
+    user = UserInfoSerializer()
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -30,7 +31,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        exclude = ('user',)
+        fields = '__all__'
 
 
 class OrderEditSerializer(serializers.ModelSerializer):
