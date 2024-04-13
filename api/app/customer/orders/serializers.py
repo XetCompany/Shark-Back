@@ -17,6 +17,11 @@ class OrderSerializer(serializers.ModelSerializer):
     products = OrderProductSerializer(many=True)
     group_paths = GroupPathsSerializer(many=True)
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['total_price'] = sum([product['product']['price'] * product['count'] for product in data['products']])
+        return data
+
     class Meta:
         model = Order
         exclude = ('user',)
