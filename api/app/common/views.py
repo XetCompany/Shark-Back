@@ -46,7 +46,7 @@ class NotificationsView(APIView):
 
     @extend_schema(responses=NotificationSerializer(many=True))
     def get(self, request):
-        notifications = Notification.objects.filter(user=request.user)
+        notifications = Notification.objects.filter(user=request.user).all()[::-1]
         serializer = NotificationSerializer(notifications, many=True)
         return Response(serializer.data)
 
