@@ -21,7 +21,9 @@ class OrderSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         data['total_price'] = sum([float(product['product']['price']) * product['count'] for product in data['products']])
 
-        data['total_length'] = sum([float(path['path']['length']) for group_path in data['group_paths'] for path in group_path['paths']])
+        data['total_path_length'] = sum([float(path['path']['length']) for group_path in data['group_paths'] for path in group_path['paths']])
+        data['total_path_price'] = sum([float(path['path']['price']) for group_path in data['group_paths'] for path in group_path['paths']])
+        data['total_path_time'] = sum([path['path']['time'] for group_path in data['group_paths'] for path in group_path['paths']])
 
         return data
 
