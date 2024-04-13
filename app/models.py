@@ -584,6 +584,13 @@ class ResetPasswordToken(models.Model):
         return f'id: {self.id}, user: {self.user.username}'
 
 
+class NotificationType:
+    TYPE_TEXT = 'text'
+    TYPE_EVALUATION = 'evaluation'
+    TYPE_ORDER = 'order'
+    TYPE_DELIVERED = 'delivered'
+
+
 class Notification(models.Model):
     user = models.ForeignKey(
         verbose_name='Пользователь',

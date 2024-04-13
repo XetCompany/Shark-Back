@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.app.customer.orders.serializers import OrderSerializer, OrderEditSerializer
-from app.models import Order, Cart, SearchInfo, OrderStatus, ProductInWarehouse
+from app.models import Order, Cart, SearchInfo, OrderStatus, ProductInWarehouse, Notification, NotificationType
 
 
 class OrderView(APIView):
@@ -65,6 +65,26 @@ class OrderSearchInfoView(APIView):
                 product_warehouse.save()
             else:
                 product_warehouse.save()
+
+        if not order_products:
+            return Response({'error': 'No products in order'}, status=400)
+
+        # Отправка уведомления производителю
+        company = order_products[0].product.company
+        Notification.objects.create(
+            user=company,
+            text=f'Пользователь {request.user.username} оформил заказ на ваш(и) продукт(ы)',
+            type=NotificationType.TYPE_ORDER,
+            additional_data={'order_id': order.id},
+        )
+
+        # Отправка уведомления покупателю
+        Notification.objects.create(
+            user=request.user,
+            text=f'Ваш заказ на продукт(ы) {", ".join([product.product.name for product in order_products])} успешно доставлен',
+            type=NotificationType.TYPE_DELIVERED,
+            additional_data={'order_id': order.id},
+        )
 
         return Response(OrderSerializer(order).data)
 

@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from api.app.common.serializers import ProductCompanySerializer
 from api.app.customer.products.serializers import AddEvaluationAndCommentSerializer
 from api.app.customer.serializers import ProductCompanyCustomerSerializer
-from app.models import ProductCompany
+from app.models import ProductCompany, Notification, NotificationType
 
 
 class ProductsView(APIView):
@@ -42,4 +42,13 @@ class ProductEvaluateView(APIView):
         serializer.is_valid(raise_exception=True)
         evaluation = serializer.save(author=request.user)
         product.evaluations.add(evaluation)
+
+        # Отправка уведомления производителю
+        Notification.objects.create(
+            user=product.company,
+            text=f'Пользователь {request.user.username} оставил отзыв на ваш продукт {product.name}',
+            type=NotificationType.TYPE_EVALUATION,
+            additional_data={'product_id': product.id, 'evaluation_id': evaluation.id},
+        )
+
         return Response(serializer.data)
