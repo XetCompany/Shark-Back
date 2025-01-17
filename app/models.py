@@ -413,6 +413,7 @@ class OrderStatus(models.TextChoices):
     DECLINED = 'declined', 'Отклонен'
 
 
+
 class Order(models.Model):
     products = models.ManyToManyField(
         verbose_name='Заказные продукты',
